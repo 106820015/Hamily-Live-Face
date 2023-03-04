@@ -673,14 +673,16 @@ let btnPosBase, saveBtnPos
 let ShowCloseBtn, RandomBtn, SeaBtn, LiveBtn, AlphaBtn, saveBtn, btnText, bgRect, spaceLine1, spaceLine2
 let mobileTextSpace, pcTextSpace
 let line1
+let allBtnContainer, btnContainer0, btnContainer1, btnContainer2, btnContainer3, btnContainer4
+let btnContainerList, btnImageList
 
 function setup() {
     createCanvas(WIDTH, HEIGHT);
     webGlGraphics = createGraphics(width * 2,height * 2,WEBGL);
     webGlGraphics2 = createGraphics(width * 2,height * 2,WEBGL);
-	faceCanvas =  createGraphics(width,height);
+    faceCanvas =  createGraphics(width,height);
     faceCanvas.pixelDensity(2);
-	glassesCanvas =  createGraphics(width,height);
+    glassesCanvas =  createGraphics(width,height);
     glassesCanvas.pixelDensity(2);
     rect(100 * M, 500 * M, 50 * M, 50 * M);
 
@@ -703,7 +705,7 @@ function setup() {
         let d = noise(0.01 * x, 0.01 * y) * 0.5 + 1;
         noiseImg.ellipse(x, y, d / 1.75, d / 1.75);
     }
- 
+    
     ellipseMode(CENTER);
 
     seedNum = int(Rseed.random_between(0, 10000));
@@ -743,8 +745,16 @@ function setup() {
     c1 = color(29, 90, 231);
     c2 = color(255, 209, 102);
     c3 = color(128, 255, 219);
-
+    
     bgRect = createDiv("")
+    allBtnContainer = createDiv("")
+    btnContainer0 = createDiv("")
+    btnContainer1 = createDiv("")
+    btnContainer2 = createDiv("")
+    btnContainer3 = createDiv("")
+    btnContainer4 = createDiv("")
+    btnContainerList = [btnContainer0, btnContainer1, btnContainer2, btnContainer3, btnContainer4]
+
     ShowCloseBtn = createDiv("Close");
     RandomBtn = createDiv("Random");
     SeaBtn = createDiv("Sea");
@@ -758,80 +768,121 @@ function setup() {
 
     console.log([document.documentElement.clientWidth/2, WIDTH/2, WIDTH /40*1.5])
     showCaptureBtn = createImg('img/Capture.png');
-	showCaptureBtn.size(WIDTH/20, WIDTH/20)
+    showCaptureBtn.size(WIDTH/20, WIDTH/20)
     showCaptureBtn.style("opacity","0.85")
-	showCaptureBtn.position(btnPosBase, HEIGHT - WIDTH/13)
+    // showCaptureBtn.position(btnPosBase, HEIGHT - WIDTH/13)
     showCaptureBtn.mouseOver(() =>showCaptureBtn.style("opacity", "1"));
     showCaptureBtn.mouseOut(() =>showCaptureBtn.style("opacity", "0.85"));
     showCaptureBtn.mousePressed(setShowCapture)
 
     switchRobotBtn = createImg('img/Switch Face.png');
-	switchRobotBtn.size(WIDTH/20, WIDTH/20)
+    switchRobotBtn.size(WIDTH/20, WIDTH/20)
     switchRobotBtn.style("opacity","0.85")
-	switchRobotBtn.position(btnPosBase  + WIDTH/9, HEIGHT - WIDTH/13)
+    // switchRobotBtn.position(btnPosBase  + WIDTH/9, HEIGHT - WIDTH/13)
     switchRobotBtn.mouseOver(() =>switchRobotBtn.style("opacity", "1"));
     switchRobotBtn.mouseOut(() =>switchRobotBtn.style("opacity", "0.85"));
     switchRobotBtn.mousePressed(setSwitchRobot)
 
     waveModeBtn = createImg('img/Wave.png');
-	waveModeBtn.size(WIDTH/20, WIDTH/20)
+    waveModeBtn.size(WIDTH/20, WIDTH/20)
     waveModeBtn.style("opacity","0.85")
-	waveModeBtn.position(btnPosBase  + WIDTH/9*2, HEIGHT - WIDTH/13)
+    // waveModeBtn.position(btnPosBase  + WIDTH/9*2, HEIGHT - WIDTH/13)
     waveModeBtn.mouseOver(() =>waveModeBtn.style("opacity", "1"));
     waveModeBtn.mouseOut(() =>waveModeBtn.style("opacity", "0.85"));
     waveModeBtn.mousePressed(setBgMode1)
 
     liveModeBtn = createImg('img/Live.png');
-	liveModeBtn.size(WIDTH/20, WIDTH/20)
+    liveModeBtn.size(WIDTH/20, WIDTH/20)
     liveModeBtn.style("opacity","0.85")
-	liveModeBtn.position(btnPosBase  + WIDTH/9*2.8, HEIGHT - WIDTH/13)
+    // liveModeBtn.position(btnPosBase  + WIDTH/9*2.8, HEIGHT - WIDTH/13)
     liveModeBtn.mouseOver(() =>liveModeBtn.style("opacity", "1"));
     liveModeBtn.mouseOut(() =>liveModeBtn.style("opacity", "0.85"));
     liveModeBtn.mousePressed(setBgMode2)
 
     alphaModeBtn = createImg('img/Alpha.png');
-	alphaModeBtn.size(WIDTH/20, WIDTH/20)
+    alphaModeBtn.size(WIDTH/20, WIDTH/20)
     alphaModeBtn.style("opacity","0.85")   
-	alphaModeBtn.position(btnPosBase  + WIDTH/9*3.6, HEIGHT - WIDTH/13)
+    // alphaModeBtn.position(btnPosBase  + WIDTH/9*3.6, HEIGHT - WIDTH/13)
     alphaModeBtn.mouseOver(() =>alphaModeBtn.style("opacity", "1"));
     alphaModeBtn.mouseOut(() =>alphaModeBtn.style("opacity", "0.85"));
     alphaModeBtn.mousePressed(setBgMode3)
 
     saveBtn = createImg('img/Save.png');
-	saveBtn.size(WIDTH/12, WIDTH/12)
+    saveBtn.size(WIDTH/12, WIDTH/12)
     saveBtn.style("opacity","0.85")   
-	saveBtn.position(document.documentElement.clientWidth/2 + WIDTH/2 - WIDTH/10, 0)
+    saveBtn.position(document.documentElement.clientWidth/2 + WIDTH/2 - WIDTH/10, 0)
     saveBtn.mouseOver(() =>saveBtn.style("opacity", "1"));
     saveBtn.mouseOut(() =>saveBtn.style("opacity", "0.85"));
     saveBtn.mousePressed(saveImg)
 
-    hashInput = createInput().attribute('placeholder', 'Enter the hash of your HAM');
+    hashInput = createInput().attribute('placeholder', 'Your HAM number (0-749)');
     hashInput.style('font-size', HEIGHT*0.02);
-	hashInput.position(document.documentElement.clientWidth/2 + WIDTH/16, HEIGHT - WIDTH/15);
+    hashInput.position(document.documentElement.clientWidth/2 + WIDTH/16, HEIGHT - WIDTH/15);
     hashInput.size(WIDTH/3.5, WIDTH/20);
 
     hashBtn = createButton('Generate!');
-	hashBtn.size(WIDTH/8, WIDTH/20)
+    hashBtn.size(WIDTH/8, WIDTH/20)
     hashBtn.style("background","#252525")   
     hashBtn.style("color","#ffffff")   
     hashBtn.style("border","none")   
     hashBtn.style('font-size', HEIGHT*0.02);
-	hashBtn.position(document.documentElement.clientWidth/2 + WIDTH/16 + WIDTH/3.5, HEIGHT - WIDTH/15)
+    hashBtn.position(document.documentElement.clientWidth/2 + WIDTH/16 + WIDTH/3.5, HEIGHT - WIDTH/15)
     hashBtn.mouseOver(() =>hashBtn.style("background","#353535"));
     hashBtn.mouseOut(() =>hashBtn.style("background","#252525"));
     hashBtn.mousePressed(hashRobotGenerate)
     // pauseBtn =createButton("Pause/Continue")
-	// pauseBtn.mousePressed(setLoop)
-	// pauseBtn.position(1500,410)
+    // pauseBtn.mousePressed(setLoop)
+    // pauseBtn.position(1500,410)
+
+    btnImageList = [showCaptureBtn, switchRobotBtn, waveModeBtn, liveModeBtn, alphaModeBtn]
 
     spaceLine1 = createDiv("")
+    spaceLine1.style("margin", "0 auto")
+    spaceLine1.style("display", "inline-block")
+    spaceLine1.style('background', 'white')
+    spaceLine1.style('width', "1px")
     spaceLine2 = createDiv("")
+    spaceLine2.style("margin", "0 auto")
+    spaceLine2.style("display", "inline-block")
+    spaceLine2.style('background', 'white')
+    spaceLine2.style('width', "1px")
+
+    // allBtnContainer.child(showCaptureBtn)
+    
+    // allBtnContainer.child(switchRobotBtn)
+
+    for(let i=0; i<5; i++){
+        btnContainerList[i].child(btnImageList[i])
+        btnContainerList[i].child(btnText[i])
+        btnContainerList[i].style("display", "inline-block")
+        btnContainerList[i].style("width", "18%")
+        btnContainerList[i].style("height", "100%")
+        btnContainerList[i].style("margin", "0")
+        btnContainerList[i].style("text-align", "center")
+        btnContainerList[i].style("align-items", "center")
+        btnText[i].style("width", "100%")
+        btnText[i].style('color', 'white')
+        btnText[i].style('font-family','Roboto')
+        btnText[i].style('text-align', 'center');
+        allBtnContainer.child(btnContainerList[i])
+        if(i == 0){
+            allBtnContainer.child(spaceLine1)
+            btnContainerList[i].style("width", "21%")
+        }else if(i==1){
+            allBtnContainer.child(spaceLine2)
+            btnContainerList[i].style("width", "21%")
+        }
+    }
+    
+    allBtnContainer.style("display", "inline-block")
+    allBtnContainer.style("text-align", "center")
+    allBtnContainer.style("line-height", HEIGHT*0.19 +"px")
     
     osc = new p5.Oscillator();
- 	env = new p5.Env(); 
-	env.setADSR(0.015, 0.002, 0.05, 0.03); 
-	osc.start();
-	osc.amp(env); //putting the signal into the envelope
+    env = new p5.Env(); 
+    env.setADSR(0.015, 0.002, 0.05, 0.03); 
+    osc.start();
+    osc.amp(env); //putting the signal into the envelope
 }
 
 function modelReady() {
@@ -945,7 +996,7 @@ function setShowCapture(){
     if(captureText){
         ShowCloseBtn.html('Close')
     }else{
-    ShowCloseBtn.html('Show')
+        ShowCloseBtn.html('Show')
     }
 }
 
@@ -1006,7 +1057,7 @@ function draw() {
     //         ellipse(-smoothedRobotPos.x, smoothedRobotPos.y, d*0.3)  //Remap Position
     //     }
     // pop()  
- 
+    
     //-----Switch Background Mode-----//
     if(bgMode == 1){
         background(255, 209, 102);
@@ -1122,14 +1173,14 @@ function draw() {
                     rightEyeTemp = (rightEyeBottom.y - rightEye.y) / (rightEyeBottom.x-leftEyeBottom.x)
                     rightEyeTemp = (rightEyeTemp<0.145)? 0.1 : 1;                      
                     facialFeatures.rightEyeMultiply = lerp(facialFeatures.rightEyeMultiply, rightEyeTemp, 0.6);
-   
+    
                     if(leftEyeTemp<0.145 || rightEyeTemp<0.145){
                         eyesOpen = false;
-                         if(!eyesOpen && eyesState){
+                            if(!eyesOpen && eyesState){
                             let faceDist = faceSize / WIDTH;
                             playSound(map(faceDist, 0.15, 0.5, 200, 250), map(faceDist, 0.15, 0.5, 0.1, 0.8))
                             eyesState = false;
-                         }
+                            }
                     }else{
                         eyesOpen = true;
                         eyesState = true;
@@ -1154,27 +1205,27 @@ function draw() {
 
     //-----tilt-----//
     webGlGraphics.push();
-	webGlGraphics.clear();
-	// webGlGraphics.translate(width/2,height/2)
-	webGlGraphics.rotateY(robotRotationY);
-	webGlGraphics.imageMode(CENTER);
+    webGlGraphics.clear();
+    // webGlGraphics.translate(width/2,height/2)
+    webGlGraphics.rotateY(robotRotationY);
+    webGlGraphics.imageMode(CENTER);
     webGlGraphics.scale(facialFeatures.robotSizeMultiply);  //scale robot
-	webGlGraphics.image(faceCanvas,0,0);
+    webGlGraphics.image(faceCanvas,0,0);
     webGlGraphics.translate(0, 0, 40);
-	// webGlGraphics.image(glassesCanvas,0,0);
-	webGlGraphics.pop();
+    // webGlGraphics.image(glassesCanvas,0,0);
+    webGlGraphics.pop();
 
     webGlGraphics2.push();
-	webGlGraphics2.clear();
-	// webGlGraphics2.translate(width/2,height/2)
-	webGlGraphics2.rotateY(robotRotationY);
-	webGlGraphics2.imageMode(CENTER);
+    webGlGraphics2.clear();
+    // webGlGraphics2.translate(width/2,height/2)
+    webGlGraphics2.rotateY(robotRotationY);
+    webGlGraphics2.imageMode(CENTER);
     webGlGraphics2.scale(facialFeatures.robotSizeMultiply);  //scale robot
     webGlGraphics2.translate(0, 0, 40);
-	webGlGraphics2.image(glassesCanvas,0,0);
-	webGlGraphics2.image(glassesCanvas,0,0);
-	webGlGraphics2.image(glassesCanvas,0,0);
-	webGlGraphics2.pop();
+    webGlGraphics2.image(glassesCanvas,0,0);
+    webGlGraphics2.image(glassesCanvas,0,0);
+    webGlGraphics2.image(glassesCanvas,0,0);
+    webGlGraphics2.pop();
     push()
     imageMode(CENTER)
     image(webGlGraphics,smoothedRobotPos.x, height/2);
@@ -1210,24 +1261,23 @@ function draw() {
         reBtnHeight = document.body.clientHeight/2 + HEIGHT/2 + HEIGHT*0.06
         reInputHeight = document.body.clientHeight/2 + HEIGHT/2 + HEIGHT*0.33
         btnPosBase = WIDTH*0.075
-        btnSpace = WIDTH/5
         reInputWidth = WIDTH*0.075
         reInputSpace = WIDTH*0.65
         saveBtnPos = document.documentElement.clientWidth/2 + WIDTH/2 - WIDTH/8;
         saveBtnHeight =document.body.clientHeight/2 - HEIGHT/2
+        allBtnContainer.position(0, reBtnHeight)
+        allBtnContainer.style('width', "100%")
+        allBtnContainer.style('height', HEIGHT*0.19 +"px")
     }else{
-        reBtnHeight = document.body.clientHeight/2 + HEIGHT/2 - HEIGHT/12
+        reBtnHeight = document.body.clientHeight/2 + HEIGHT/2 - HEIGHT*0.09
         reInputHeight = reBtnHeight + HEIGHT*0.01
         reInputWidth = document.documentElement.clientWidth/2 + WIDTH/16
         reInputSpace = WIDTH/3.5
-        btnSpace = WIDTH/9
         saveBtnHeight = document.body.clientHeight/2 - HEIGHT/2
+        allBtnContainer.position(document.documentElement.clientWidth/2 - WIDTH/2, reBtnHeight)
+        allBtnContainer.style('width', WIDTH/2+"px")
+        allBtnContainer.style('height', HEIGHT*0.08+"px")
     }
-    showCaptureBtn.position(btnPosBase, reBtnHeight)
-    switchRobotBtn.position(btnPosBase + btnSpace*1.05, reBtnHeight)
-    waveModeBtn.position(btnPosBase + btnSpace*2, reBtnHeight)
-    liveModeBtn.position(btnPosBase + btnSpace*2.8, reBtnHeight)
-    alphaModeBtn.position(btnPosBase + btnSpace*3.6, reBtnHeight)
     hashInput.position(reInputWidth, reInputHeight);
     hashBtn.position(reInputWidth + reInputSpace, reInputHeight)
     saveBtn.position(saveBtnPos, saveBtnHeight)
@@ -1259,7 +1309,7 @@ function draw() {
     hashBtn.size(inputSize2, inputHeight)
     hashInput.style('font-size', inputTextSize);
     hashBtn.style('font-size', inputTextSize);
-	saveBtn.size(saveBtnSize, saveBtnSize)
+    saveBtn.size(saveBtnSize, saveBtnSize)
 
     //-----Load Model Hint-----// 
     if(!isModelLoaded){
@@ -1295,10 +1345,6 @@ function draw() {
     //-----UI-----//
     push()
     fill(37,37,37,200)
-    // if(document.body.clientWidth < 450){
-    //     rect(0,HEIGHT-WIDTH/8.5,WIDTH, WIDTH/10)
-    // }else{
-    // }
     if(document.documentElement.clientWidth<450){
         // rect(0,HEIGHT+WIDTH/5.5,WIDTH, WIDTH/5)
     }else{
@@ -1312,46 +1358,23 @@ function draw() {
     fill(255)
     let textPosBase, textPosBaseHeight, lineStart, lineEnd
     if(document.documentElement.clientWidth<450){
-        textPosBase = WIDTH*0.055
-        textPosBaseHeight = document.body.clientHeight/2 + HEIGHT/2 + HEIGHT*0.21
-        lineStart = WIDTH/6
-        lineEnd = WIDTH/10
-
         btnText.forEach(function(btn, index){
             btn.style('font-size', HEIGHT*0.02 + "px");
-            btn.style('color', 'white');
-            btn.style('font-family','Roboto');
-            btn.position(textPosBase + mobileTextSpace[index] * WIDTH, textPosBaseHeight)
+            btn.style("line-height", HEIGHT*0.08 +"px")
         })
-        spaceLine1.style('background', 'white')
-        spaceLine1.position(document.body.clientWidth/2 - WIDTH/2 + WIDTH*0.24, document.body.clientHeight/2 + HEIGHT/2 + HEIGHT*0.05)
-        spaceLine1.style('width', "1px")
-        spaceLine1.style('height', HEIGHT*0.19 +"px")
-        spaceLine2.style('background', 'white')
-        spaceLine2.position(document.body.clientWidth/2 - WIDTH/2 + WIDTH*0.44, document.body.clientHeight/2 + HEIGHT/2 + HEIGHT*0.05)
-        spaceLine2.style('width', "1px")
-        spaceLine2.style('height', HEIGHT*0.19 +"px")
+        allBtnContainer.style("line-height", HEIGHT*0.19 +"px")
+        spaceLine1.style('height', "100%")
+        spaceLine2.style('height', "100%")
     }else{
-        textPosBase = document.body.clientWidth/2 - WIDTH/2 + HEIGHT*0.01
-        textPosBaseHeight = document.body.clientHeight/2 + HEIGHT/2 - HEIGHT*0.03
-        lineStart = WIDTH/13
-        lineEnd = WIDTH/100
-
         btnText.forEach(function(btn, index){
             btn.style('font-size', HEIGHT*0.02 + "px");
-            btn.style('color', 'white');
-            btn.style('font-family','Roboto');
-            btn.position(textPosBase + pcTextSpace[index] * WIDTH, textPosBaseHeight)
+            btn.style("line-height", HEIGHT*0.03 +"px")
+            // btn.style('color', 'white');
+            // btn.style('font-family','Roboto');
+            // btn.position(textPosBase + pcTextSpace[index] * WIDTH, textPosBaseHeight)
         })
-        
-        spaceLine1.style('background', 'white')
-        spaceLine1.position(document.body.clientWidth/2 - WIDTH/2 + WIDTH*0.12, document.body.clientHeight/2 + HEIGHT/2 - HEIGHT*0.09)
-        spaceLine1.style('width', "1px")
-        spaceLine1.style('height', HEIGHT*0.08 +"px")
-        spaceLine2.style('background', 'white')
-        spaceLine2.position(document.body.clientWidth/2 - WIDTH/2 + WIDTH*0.23, document.body.clientHeight/2 + HEIGHT/2 - HEIGHT*0.09)
-        spaceLine2.style('width', "1px")
-        spaceLine2.style('height', HEIGHT*0.08 +"px")
+        spaceLine1.style('height', "100%")
+        spaceLine2.style('height', "100%")
     }
     
     pop()
@@ -1383,9 +1406,6 @@ function sol(gunesColor) {
         ellipse(WIDTH / 1.25, HEIGHT / 4, r * sin(frameCount / 100)+i*50, r * sin(frameCount / 100)+i*50);
 
     }
- 
-    // ellipse(WIDTH / 1.25, HEIGHT / 4, ellipse1$ * sin(frameCount / 100)*facePos, ellipse1$ * sin(frameCount / 100)*facePos);
-    // ellipse(WIDTH / 1.25, HEIGHT / 4, ellipse2$ * sin(-frameCount / 100)*facePos, ellipse2$ * sin(-frameCount / 100)*facePos);
     pop();
 }
 
