@@ -668,9 +668,9 @@ let facialFeatures = new FacialFeatures({
     mouthRightMultiply: 0,
     centerX: 0
 });
-let btnPosBase, saveBtnPos
+let btnPosBase, saveBtnPos, recordBtnPos
 
-let ShowCloseBtn, RandomBtn, SeaBtn, LiveBtn, AlphaBtn, saveBtn, btnText, bgRect, spaceLine1, spaceLine2
+let ShowCloseBtn, RandomBtn, SeaBtn, LiveBtn, AlphaBtn, saveBtn, recordBtn, btnText, bgRect, spaceLine1, spaceLine2
 let mobileTextSpace, pcTextSpace
 let line1
 let allBtnContainer, btnContainer0, btnContainer1, btnContainer2, btnContainer3, btnContainer4
@@ -814,6 +814,12 @@ function setup() {
     saveBtn.mouseOver(() =>saveBtn.style("opacity", "1"));
     saveBtn.mouseOut(() =>saveBtn.style("opacity", "0.85"));
     saveBtn.mousePressed(saveImg)
+
+    recordBtn = document.getElementById("save_canvas");
+    recordBtn.style.width = WIDTH/12;
+    recordBtn.style.height = WIDTH/12;
+    recordBtn.style.display = "block";
+    recordBtn.style.left = document.documentElement.clientWidth/2 + WIDTH/2 - WIDTH/5;  
 
     hashInput = createInput().attribute('placeholder', 'Your HAM number (0-749)');
     hashInput.style('font-size', HEIGHT*0.02);
@@ -1264,6 +1270,7 @@ function draw() {
         reInputWidth = WIDTH*0.075
         reInputSpace = WIDTH*0.65
         saveBtnPos = document.documentElement.clientWidth/2 + WIDTH/2 - WIDTH/8;
+        recordBtnPos = document.documentElement.clientWidth/2 + WIDTH/2 - WIDTH/4;
         saveBtnHeight =document.body.clientHeight/2 - HEIGHT/2
         allBtnContainer.position(0, reBtnHeight)
         allBtnContainer.style('width', "100%")
@@ -1281,6 +1288,8 @@ function draw() {
     hashInput.position(reInputWidth, reInputHeight);
     hashBtn.position(reInputWidth + reInputSpace, reInputHeight)
     saveBtn.position(saveBtnPos, saveBtnHeight)
+    recordBtn.style.left = recordBtnPos;
+    recordBtn.style.top = saveBtnHeight;
     // button size
     
     let btnSize, inputSize1, inputSize2, inputHeight, inputTextSize, saveBtnSize
@@ -1310,6 +1319,8 @@ function draw() {
     hashInput.style('font-size', inputTextSize);
     hashBtn.style('font-size', inputTextSize);
     saveBtn.size(saveBtnSize, saveBtnSize)
+    recordBtn.style.width = saveBtnSize;
+    recordBtn.style.height = saveBtnSize;
 
     //-----Load Model Hint-----// 
     if(!isModelLoaded){
@@ -1539,4 +1550,5 @@ function windowResized() {
     ellipse2$ = HEIGHT / 5 + HEIGHT / 15
     btnPosBase =document.documentElement.clientWidth/2 - WIDTH/2 + WIDTH /40*1.5;
     saveBtnPos = document.documentElement.clientWidth/2 + WIDTH/2 - WIDTH/10;
+    recordBtnPos = document.documentElement.clientWidth/2 + WIDTH/2 - WIDTH/5;
 }

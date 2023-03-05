@@ -15,7 +15,7 @@ var btn = document.querySelector("button#save_canvas");
 var chunks = [];
 var gif
 var recordGif = false
-var name = 'doriclaudino_square'
+var name = 'Sail-o-bots'
 var initialTime = new Date()
 var endTime
 var targetFps = 60
@@ -39,10 +39,9 @@ function record() {
   //create files
   recorder.onstop = onRecorderStop;
 
-
   btn.onclick = e => {
     recorder.stop();
-    btn.textContent = "start recording";
+    document.getElementById("record_img").src="img/Record.png"
     btn.onclick = record;
   };
 
@@ -52,8 +51,8 @@ function record() {
   //start recording
   recorder.start();
 
-  //change button text
-  btn.textContent = "stop recording";
+  //change button img
+  document.getElementById("record_img").src="img/Recording.png"
 }
 
 //add a frame every 50ms
