@@ -678,8 +678,8 @@ let btnContainerList, btnImageList
 
 function setup() {
     createCanvas(WIDTH, HEIGHT);
-    webGlGraphics = createGraphics(width * 2,height * 2,WEBGL);
-    webGlGraphics2 = createGraphics(width * 2,height * 2,WEBGL);
+    webGlGraphics = createGraphics(width * 1.5,height * 1.5,WEBGL);
+    webGlGraphics2 = createGraphics(width * 1.2,height * 1.2,WEBGL);
     faceCanvas =  createGraphics(width,height);
     faceCanvas.pixelDensity(2);
     glassesCanvas =  createGraphics(width,height);
@@ -688,7 +688,7 @@ function setup() {
 
     smooth(8);
     video = createCapture(VIDEO);
-    video.size(width, height);
+    // video.size(width, height);
     video.hide();
     // poseNet = ml5.poseNet(video, modelLoaded);
     // poseNet.on('pose', gotPoses);
@@ -915,7 +915,7 @@ function drawBox(detections){
         const alignedRect = detections[i].alignedRect;
         const x = alignedRect._box._x
         const y = alignedRect._box._y
-        boxWidth = alignedRect._box._width
+        boxWidth = alignedRect._box._width 
         const boxHeight  = alignedRect._box._height
         if(showCapture){
             push();
@@ -1044,7 +1044,7 @@ function draw() {
     randomSeed(seedNum);
     clear(); 
     noStroke();
-    video.size(width, height);
+    video.size(width, height);  
     //------poseNet------//
     // push()
     //     imageMode(CORNER);
@@ -1118,10 +1118,10 @@ function draw() {
         boat(WIDTH / 2, HEIGHT / 2);
     }else if(bgMode == 2){
         push()
-        imageMode(CORNER);
-        scale(-1,1);
-        translate(0,0);
-        image(video, 0, 0, -WIDTH, HEIGHT);
+        imageMode(CENTER);
+        translate( WIDTH/2, HEIGHT/2);
+        scale(-1.4, 1.05);
+        image(video,0,0, -WIDTH, HEIGHT);
         pop();
     }
 
@@ -1130,10 +1130,11 @@ function draw() {
     imageMode(CORNER);
     // scale(-0.4,0.4)
     // image(video,-WIDTH,0);
-    scale(-0.2,0.2);
+    scale(-0.2,0.15);    
     translate(-WIDTH,0);
     if(showCapture)
         image(video, 0, 0, -WIDTH, HEIGHT);
+        // image(video, 0, 0, -video.width,video.height);
         push()
             if (detections) {
                 if (detections.length > 0) {
@@ -1168,7 +1169,7 @@ function draw() {
                     leftEyeTemp = (leftEyeBottom.y - leftEye.y) / (rightEyeBottom.x-leftEyeBottom.x)
                     leftEyeTemp = (leftEyeTemp<0.145)? 0.1 : 1;  
                     facialFeatures.leftEyeMultiply = lerp(facialFeatures.leftEyeMultiply, leftEyeTemp, 0.6);
-                    
+                    print(leftEyeBottom.y - leftEye.y)
                     // rightEyeTemp = (nose.y - rightEye.y)/(nose.y - rightEyeBottom.y);
                     // rightEyeTemp = (((rightEyeBottom.y - rightEye.y) / boxWidth)<0.046)?0.1:1
                     // rightEyeTemp = (rightEyeTemp<1.18)? 0.1 : 1;
