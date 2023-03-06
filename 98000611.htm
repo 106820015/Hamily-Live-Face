@@ -46,9 +46,29 @@ canvas {
   bottom: 0;
   left: 0;
   right: 0;
-}</style></head>
+}
+#save_canvas {
+  background-color: transparent;
+  background-repeat: no-repeat;
+  border: none;
+  overflow: hidden;
+  outline: none;
+  display: none;
+  position: absolute;
+  z-index: 100;
+  top:0;
+  opacity: 0.85;
+  padding: 0;
+}
+#save_canvas:hover{
+  opacity: 1;
+}
+#record_img{
+  width: 100%;
+}
+</style></head>
 <body>
-    <button id="save_canvas">save_canvas</button>
+    <button id="save_canvas"><img src="img/Record.png" id="record_img"></button>
     <script src="sketch.js"></script>
     <script src="recordCanvas.js"></script>
 </body></html>

@@ -668,9 +668,9 @@ let facialFeatures = new FacialFeatures({
     mouthRightMultiply: 0,
     centerX: 0
 });
-let btnPosBase, saveBtnPos
+let btnPosBase, saveBtnPos, recordBtnPos
 
-let ShowCloseBtn, RandomBtn, SeaBtn, LiveBtn, AlphaBtn, saveBtn, btnText, bgRect, spaceLine1, spaceLine2
+let ShowCloseBtn, RandomBtn, SeaBtn, LiveBtn, AlphaBtn, saveBtn, recordBtn, btnText, bgRect, spaceLine1, spaceLine2
 let mobileTextSpace, pcTextSpace
 let line1
 let allBtnContainer, btnContainer0, btnContainer1, btnContainer2, btnContainer3, btnContainer4
@@ -678,8 +678,8 @@ let btnContainerList, btnImageList
 
 function setup() {
     createCanvas(WIDTH, HEIGHT);
-    webGlGraphics = createGraphics(width * 2,height * 2,WEBGL);
-    webGlGraphics2 = createGraphics(width * 2,height * 2,WEBGL);
+    webGlGraphics = createGraphics(width * 1.5,height * 1.5,WEBGL);
+    webGlGraphics2 = createGraphics(width * 1.2,height * 1.2,WEBGL);
     faceCanvas =  createGraphics(width,height);
     faceCanvas.pixelDensity(2);
     glassesCanvas =  createGraphics(width,height);
@@ -688,7 +688,7 @@ function setup() {
 
     smooth(8);
     video = createCapture(VIDEO);
-    video.size(width, height);
+    // video.size(width, height);
     video.hide();
     // poseNet = ml5.poseNet(video, modelLoaded);
     // poseNet.on('pose', gotPoses);
@@ -815,6 +815,12 @@ function setup() {
     saveBtn.mouseOut(() =>saveBtn.style("opacity", "0.85"));
     saveBtn.mousePressed(saveImg)
 
+    recordBtn = document.getElementById("save_canvas");
+    recordBtn.style.width = WIDTH/12;
+    recordBtn.style.height = WIDTH/12;
+    recordBtn.style.display = "block";
+    recordBtn.style.left = document.documentElement.clientWidth/2 + WIDTH/2 - WIDTH/5;  
+
     hashInput = createInput().attribute('placeholder', 'Your HAM number (0-749)');
     hashInput.style('font-size', HEIGHT*0.02);
     hashInput.position(document.documentElement.clientWidth/2 + WIDTH/16, HEIGHT - WIDTH/15);
@@ -909,7 +915,7 @@ function drawBox(detections){
         const alignedRect = detections[i].alignedRect;
         const x = alignedRect._box._x
         const y = alignedRect._box._y
-        boxWidth = alignedRect._box._width
+        boxWidth = alignedRect._box._width 
         const boxHeight  = alignedRect._box._height
         if(showCapture){
             push();
@@ -1038,7 +1044,7 @@ function draw() {
     randomSeed(seedNum);
     clear(); 
     noStroke();
-    video.size(width, height);
+    video.size(width, height);  
     //------poseNet------//
     // push()
     //     imageMode(CORNER);
@@ -1112,10 +1118,10 @@ function draw() {
         boat(WIDTH / 2, HEIGHT / 2);
     }else if(bgMode == 2){
         push()
-        imageMode(CORNER);
-        scale(-1,1);
-        translate(0,0);
-        image(video, 0, 0, -WIDTH, HEIGHT);
+        imageMode(CENTER);
+        translate( WIDTH/2, HEIGHT/2);
+        scale(-1.4, 1.05);
+        image(video,0,0, -WIDTH, HEIGHT);
         pop();
     }
 
@@ -1124,10 +1130,11 @@ function draw() {
     imageMode(CORNER);
     // scale(-0.4,0.4)
     // image(video,-WIDTH,0);
-    scale(-0.2,0.2);
+    scale(-0.2,0.15);    
     translate(-WIDTH,0);
     if(showCapture)
         image(video, 0, 0, -WIDTH, HEIGHT);
+        // image(video, 0, 0, -video.width,video.height);
         push()
             if (detections) {
                 if (detections.length > 0) {
@@ -1162,7 +1169,7 @@ function draw() {
                     leftEyeTemp = (leftEyeBottom.y - leftEye.y) / (rightEyeBottom.x-leftEyeBottom.x)
                     leftEyeTemp = (leftEyeTemp<0.145)? 0.1 : 1;  
                     facialFeatures.leftEyeMultiply = lerp(facialFeatures.leftEyeMultiply, leftEyeTemp, 0.6);
-                    
+                    print(leftEyeBottom.y - leftEye.y)
                     // rightEyeTemp = (nose.y - rightEye.y)/(nose.y - rightEyeBottom.y);
                     // rightEyeTemp = (((rightEyeBottom.y - rightEye.y) / boxWidth)<0.046)?0.1:1
                     // rightEyeTemp = (rightEyeTemp<1.18)? 0.1 : 1;
@@ -1264,6 +1271,7 @@ function draw() {
         reInputWidth = WIDTH*0.075
         reInputSpace = WIDTH*0.65
         saveBtnPos = document.documentElement.clientWidth/2 + WIDTH/2 - WIDTH/8;
+        recordBtnPos = document.documentElement.clientWidth/2 + WIDTH/2 - WIDTH/4;
         saveBtnHeight =document.body.clientHeight/2 - HEIGHT/2
         allBtnContainer.position(0, reBtnHeight)
         allBtnContainer.style('width', "100%")
@@ -1281,6 +1289,8 @@ function draw() {
     hashInput.position(reInputWidth, reInputHeight);
     hashBtn.position(reInputWidth + reInputSpace, reInputHeight)
     saveBtn.position(saveBtnPos, saveBtnHeight)
+    recordBtn.style.left = recordBtnPos;
+    recordBtn.style.top = saveBtnHeight;
     // button size
     
     let btnSize, inputSize1, inputSize2, inputHeight, inputTextSize, saveBtnSize
@@ -1310,6 +1320,8 @@ function draw() {
     hashInput.style('font-size', inputTextSize);
     hashBtn.style('font-size', inputTextSize);
     saveBtn.size(saveBtnSize, saveBtnSize)
+    recordBtn.style.width = saveBtnSize;
+    recordBtn.style.height = saveBtnSize;
 
     //-----Load Model Hint-----// 
     if(!isModelLoaded){
@@ -1539,4 +1551,5 @@ function windowResized() {
     ellipse2$ = HEIGHT / 5 + HEIGHT / 15
     btnPosBase =document.documentElement.clientWidth/2 - WIDTH/2 + WIDTH /40*1.5;
     saveBtnPos = document.documentElement.clientWidth/2 + WIDTH/2 - WIDTH/10;
+    recordBtnPos = document.documentElement.clientWidth/2 + WIDTH/2 - WIDTH/5;
 }
