@@ -121,16 +121,17 @@ function onRecorderHighRStop(e) {
   recordGif = false
   var blobWebm_highR = new Blob(chunks_highR);
   
-  hint.textContent = "downloading···  \r\n";
-  hint.textContent += ".webm (done immediately)\r\n";
-  hint.textContent += ".mp4 (takes 1-2 minutes)";
+  hint.textContent = "downloading···(two files)  \r\n";
+  hint.textContent += "WebM (done immediately)\r\n";
+  hint.textContent += "MP4 (takes 1-2 minutes)";
+  hint.style.lineHeight = "1.5";
   hint.style.display = "block";
+
   //download webm
   console.log(`rendering...video/webm`)
   download(blobWebm_highR, `${name}.webm`, "video/webm")  
-
-
 }
+
 function onRecorderStop(e) {
   var blobWebm = new Blob(chunks);
   //download after codec mp4
