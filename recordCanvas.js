@@ -20,79 +20,127 @@ var recordGif = false
 var name = 'Sail-o-bots'
 var initialTime = new Date()
 var endTime
-var targetFps = 60
+var targetFps = 30
 
 function record() {
   logs = []
-  gif = createGif()
-  recordGif = true
+  // gif = createGif()
+  // recordGif = true
   chunks = [];
+  chunks_highR = [];
   frames = [];
   chunks.length = 0;
-  let canvas = document.querySelector("canvas")
+  chunks_highR.length = 0;
+  let sourceCanvas = document.querySelector("canvas")
+  let canvas = document.createElement('canvas');
+
+  canvas.width = 1000;
+  canvas.height = 1000;
+  var ctx = canvas.getContext("2d");
+  var i = window.setInterval(function() {ctx.drawImage(sourceCanvas,0, 0, canvas.width, canvas.height)},20);
+
   let stream = canvas.captureStream(targetFps);
+  let stream_highR = sourceCanvas.captureStream(targetFps);
+  
   let recorder = new MediaRecorder(stream);
+  let recorder_highR = new MediaRecorder(stream_highR);
+
   recorder.ondataavailable = e => {
     if (e.data.size) {
       chunks.push(e.data);
     }
   };
+  recorder_highR.ondataavailable = e => {
+    if (e.data.size) {
+      chunks_highR.push(e.data);
+    }
+  };
 
   //create files
   recorder.onstop = onRecorderStop;
+  recorder_highR.onstop = onRecorderHighRStop;
 
   btn.onclick = e => {
     recorder.stop();
+    recorder_highR.stop();
     document.getElementById("record_img").src="img/Record.png"
     btn.onclick = record;
   };
 
   //start recording frames for gif
-  recorder.onstart = onRecorderStart  
+  // recorder.onstart = onRecorderStart  
 
   //start recording
   recorder.start();
+  recorder_highR.start();
 
   //change button img
   document.getElementById("record_img").src="img/Recording.png"
 }
 
 //add a frame every 50ms
-function onRecorderStart() {
-  initialTime = new Date()
-  let interval = setInterval(() => {
-    if (!recordGif)
-      clearInterval(interval)
-    window.requestAnimationFrame(() => gif.addFrame(canvas, {
-      copy: true,
-      delay: 50
-    }));
-  }, 50)
-}
+// function onRecorderStart() {
+//   initialTime = new Date()
+//   let interval = setInterval(() => {
+//     if (!recordGif)
+//       clearInterval(interval)
+//     window.requestAnimationFrame(() => gif.addFrame(canvas, {
+//       copy: true,
+//       delay: 50
+//     }));
+//   }, 50)
+// }
 var s =0;
-//stop record and generate  webm, mp4, gif
-function onRecorderStop(e) {
+//stop record and generate  webm, mp4, gif------
+// function onRecorderStop(e) {
+//   endTime = new Date()
+//   recordGif = false
+//   var blobWebm_highR = new Blob(chunks_highR);
+//   var blobWebm = new Blob(chunks);
+//   hint.textContent = "downloading···  \r\n";
+//   hint.textContent += "(.gif, .mp4)";
+//   hint.style.display = "block";
+//   //download webm
+//   console.log(`rendering...video/webm`)
+//   download(blobWebm_highR, `${name}.webm`, "video/webm")  
+
+//   //download after codec mp4
+//   console.log(`rendering...video/mp4`)
+//   var blobMp4 = toMp4(blobWebm).then(e => {  
+//   download(e, `${name}.mp4`, "video/mp4")
+//   }).catch(e => console.log(e))
+
+//   console.log(`rendering...gif`)
+//   //download after render
+//   // gif.render()
+// }
+//-----------
+
+function onRecorderHighRStop(e) {
   endTime = new Date()
   recordGif = false
-  var blobWebm = new Blob(chunks);
-  hint.textContent = "downloading···  \r\n";
-  hint.textContent += "(.gif, .mp4)";
+  var blobWebm_highR = new Blob(chunks_highR);
+  
+  hint.textContent = "downloading···(two files)  \r\n";
+  hint.textContent += "WebM (done immediately)\r\n";
+  hint.textContent += "MP4 (takes 1-2 minutes)";
+  hint.style.lineHeight = "1.5";
   hint.style.display = "block";
-  //download webm
-  // console.log(`rendering...video/webm`)
-  // download(blobWebm, `${name}.webm`, "video/webm")  
 
+  //download webm
+  console.log(`rendering...video/webm`)
+  download(blobWebm_highR, `${name}.webm`, "video/webm")  
+}
+
+function onRecorderStop(e) {
+  var blobWebm = new Blob(chunks);
   //download after codec mp4
   console.log(`rendering...video/mp4`)
   var blobMp4 = toMp4(blobWebm).then(e => {  
   download(e, `${name}.mp4`, "video/mp4")
   }).catch(e => console.log(e))
 
-  console.log(`rendering...gif`)
-  //download after render
-  gif.render()
 }
-
 btn.onclick = record;
 
 async function toMp4(blobData) {
