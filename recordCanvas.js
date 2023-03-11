@@ -23,59 +23,88 @@ var endTime
 var targetFps = 30
 
 function record() {
+  hint.textContent = "Recording···";
+  hint.style.display = "block";
+
   logs = []
   // gif = createGif()
   // recordGif = true
-  chunks = [];
-  chunks_highR = [];
   frames = [];
-  chunks.length = 0;
-  chunks_highR.length = 0;
   let sourceCanvas = document.querySelector("canvas")
-  let canvas = document.createElement('canvas');
+  if(isWebM){
+    chunks_highR = [];
+    chunks_highR.length = 0;
+    let stream_highR = sourceCanvas.captureStream(targetFps);
+    let recorder_highR = new MediaRecorder(stream_highR);
 
-  canvas.width = 1000;
-  canvas.height = 1000;
-  var ctx = canvas.getContext("2d");
-  var i = window.setInterval(function() {ctx.drawImage(sourceCanvas,0, 0, canvas.width, canvas.height)},20);
+    recorder_highR.ondataavailable = e => {
+      if (e.data.size) {
+        chunks_highR.push(e.data);
+      }
+    };
 
-  let stream = canvas.captureStream(targetFps);
-  let stream_highR = sourceCanvas.captureStream(targetFps);
+    recorder_highR.onstop = onRecorderHighRStop;
+
+    btn.onclick = e => {
+      recorder_highR.stop();
+      document.getElementById("record_state").src="img/Record_Select.png"
+      recordType.style.display = "none"
+      document.getElementById('download_mp4').style.display = "none"
+      document.getElementById('download_webm').style.display = "none"
+      recordBtn.style.display = "none"
+      recordFormatBtn.style.display = "block"
   
-  let recorder = new MediaRecorder(stream);
-  let recorder_highR = new MediaRecorder(stream_highR);
+      btn.onclick = record;
+    };
+    recorder_highR.start();
+  }
 
-  recorder.ondataavailable = e => {
-    if (e.data.size) {
-      chunks.push(e.data);
-    }
-  };
-  recorder_highR.ondataavailable = e => {
-    if (e.data.size) {
-      chunks_highR.push(e.data);
-    }
-  };
+  if(isMP4){
+    chunks = [];
+    chunks.length = 0;
+    let canvas = document.createElement('canvas');
 
-  //create files
-  recorder.onstop = onRecorderStop;
-  recorder_highR.onstop = onRecorderHighRStop;
+    canvas.width = 1000;
+    canvas.height = 1000;
+    var ctx = canvas.getContext("2d");
+    var i = window.setInterval(function() {ctx.drawImage(sourceCanvas,0, 0, canvas.width, canvas.height)},20);
+  
+    let stream = canvas.captureStream(targetFps);
+    
+    let recorder = new MediaRecorder(stream);
+  
+    recorder.ondataavailable = e => {
+      if (e.data.size) {
+        chunks.push(e.data);
+      }
+    };
+  
+    //create files
+    recorder.onstop = onRecorderStop;
+  
+    btn.onclick = e => {
+      recorder.stop();
+      document.getElementById("record_state").src="img/Record_Select.png"
+  
+      recordType.style.display = "none"
+      document.getElementById('download_mp4').style.display = "none"
+      document.getElementById('download_webm').style.display = "none"
+      recordBtn.style.display = "none"
+      recordFormatBtn.style.display = "block"
+  
+      btn.onclick = record;
+    };
+  
+    //start recording frames for gif
+    // recorder.onstart = onRecorderStart  
+  
+    //start recording
+    recorder.start();
 
-  btn.onclick = e => {
-    recorder.stop();
-    recorder_highR.stop();
-    document.getElementById("record_img").src="img/Record.png"
-    btn.onclick = record;
-  };
-
-  //start recording frames for gif
-  // recorder.onstart = onRecorderStart  
-
-  //start recording
-  recorder.start();
-  recorder_highR.start();
+  }
 
   //change button img
-  document.getElementById("record_img").src="img/Recording.png"
+  document.getElementById("record_state").src="img/Recording.png"
 }
 
 //add a frame every 50ms
@@ -117,23 +146,38 @@ var s =0;
 //-----------
 
 function onRecorderHighRStop(e) {
-  endTime = new Date()
   recordGif = false
   var blobWebm_highR = new Blob(chunks_highR);
   
-  hint.textContent = "downloading···(two files)  \r\n";
-  hint.textContent += "WebM (done immediately)\r\n";
-  hint.textContent += "MP4 (takes 1-2 minutes)";
-  hint.style.lineHeight = "1.5";
+  hint.textContent = "downloading WebM video···\r\n";
   hint.style.display = "block";
 
   //download webm
   console.log(`rendering...video/webm`)
   download(blobWebm_highR, `${name}.webm`, "video/webm")  
+
+  var delay = function(s){
+    return new Promise(function(resolve,reject){
+     setTimeout(resolve,s); 
+    });
+  };
+  delay().then(function(){
+    hint.textContent = "Completed!";    
+    return delay(1500); 
+  }).then(function(){
+    hint.style.display = "none";   
+    return delay(1); 
+  });
 }
 
 function onRecorderStop(e) {
+  endTime = new Date()
   var blobWebm = new Blob(chunks);
+  hint.textContent = "downloading MP4 video···\r\n";
+  hint.textContent += "it takes 1-2 minutes\r\n";
+  hint.textContent += "(depending on the length)";
+  hint.style.lineHeight = "1.5";
+  hint.style.display = "block";
   //download after codec mp4
   console.log(`rendering...video/mp4`)
   var blobMp4 = toMp4(blobWebm).then(e => {  

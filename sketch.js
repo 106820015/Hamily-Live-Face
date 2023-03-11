@@ -626,6 +626,8 @@ let controlLoop = true;
 let eyesOpen = true;
 let eyesState = true;
 let bgMode = 1;
+let isWebM = true;
+let isMP4 = false;
 let robotPos;
 let smoothedRobotPos;
 let smoothedPosValue = 0.1
@@ -670,7 +672,7 @@ let facialFeatures = new FacialFeatures({
 });
 let btnPosBase, saveBtnPos, recordBtnPos
 
-let ShowCloseBtn, RandomBtn, SeaBtn, LiveBtn, AlphaBtn, saveBtn, recordGroup, recordBtn, btnText, bgRect, spaceLine1, spaceLine2
+let ShowCloseBtn, RandomBtn, SeaBtn, LiveBtn, AlphaBtn, saveBtn, recordGroup, recordBtn, recordFormatBtn, btnText, bgRect, spaceLine1, spaceLine2
 let mobileTextSpace, pcTextSpace
 let line1
 let allBtnContainer, btnContainer0, btnContainer1, btnContainer2, btnContainer3, btnContainer4
@@ -817,15 +819,13 @@ function setup() {
     saveBtn.mousePressed(saveImg)
 
     recordGroup = document.getElementById("record");
-    recordGroup.style.left = document.documentElement.clientWidth/2 + WIDTH/2 - WIDTH/5;  
+    recordGroup.style.left = document.documentElement.clientWidth/2 + WIDTH/2 - WIDTH/5.5;  
     recordGroup.style.width = WIDTH/12;
 
     recordBtn = document.getElementById("save_canvas");
-    recordBtn.style.width = WIDTH/12;
-    recordBtn.style.height = WIDTH/12;
-    recordBtn.style.display = "block";
-    recordBtn.style.left = document.documentElement.clientWidth/2 + WIDTH/2 - WIDTH/5; 
-    
+    recordFormatBtn = document.getElementById('format_UI');
+    recordFormatBtn.style.display = "block";
+        
     recordType = document.getElementById("download_type");
 
     recordHint = document.getElementsByClassName("download_type")
@@ -836,37 +836,41 @@ function setup() {
          hint.style.padding = 5+"px "+15+"px "+5+"px "+15+"px"
          hint.style.borderRadius = "30px"
          hint.style.fontSize = 18+"px";
+         hint.style.cursor = "pointer";
     })
-    document.getElementById('save_canvas').addEventListener('mouseover', function(){
-        recordType.style.display =  "inline-block"
+    document.getElementById('format_UI').addEventListener('click', function(){      
+        recordType.style.display = "inline-block"
         document.getElementById('download_mp4').style.display = "inline-block"
         document.getElementById('download_webm').style.display = "inline-block"
+        recordBtn.style.display = "block"
+        recordFormatBtn.style.display = "none"
     });
+
+    document.getElementById('download_webm').style.background = "#ffffff80"
+    document.getElementById('download_mp4').style.background = "#ffffff00"
+
     document.getElementById('download_webm').addEventListener('click', function(){
+        isWebM = true;
+        isMP4 = false;
         console.log("00");
         document.getElementById('download_webm').style.background = "#ffffff80"
         document.getElementById('download_mp4').style.background = "#ffffff00"
     });
     document.getElementById('download_mp4').addEventListener('click', function(){
+        isMP4 = true;
+        isWebM = false;
         document.getElementById('download_mp4').style.background = "#ffffff80"
         document.getElementById('download_webm').style.background = "#ffffff00"
     });
-    document.getElementById('save_canvas').addEventListener('click', function(){
-        recordType.style.display = "none"
-        document.getElementById('download_mp4').style.display = "none"
-        document.getElementById('download_webm').style.display = "none"
-    });
-
-
-    downloadText = document.getElementById("download_hint");
-    downloadText.style.top = WIDTH/12;
-    downloadText.style.left = document.documentElement.clientWidth/2 + WIDTH/2 - WIDTH/5;  
+    // document.getElementById('save_canvas').addEventListener('click', function(){
+    //     recordType.style.display = "none"
+    //     document.getElementById('download_mp4').style.display = "none"
+    //     document.getElementById('download_webm').style.display = "none"
+    // });
     recordGroup = document.getElementById("record");
-    recordGroup.style.left = document.documentElement.clientWidth/2 + WIDTH/2 - WIDTH/5;  
+    recordGroup.style.left = document.documentElement.clientWidth/2 + WIDTH/2 - WIDTH/5.5;  
     recordGroup.style.width = WIDTH/12;
 
-    recordBtn = document.getElementById("save_canvas");
-    recordBtn.style.display = "block"; 
 
     hashInput = createInput().attribute('placeholder', 'Your HAM number (0-749)');
     hashInput.style('font-size', HEIGHT*0.02);
@@ -1180,7 +1184,7 @@ function draw() {
     scale(-0.2,0.15);    
     translate(-WIDTH,0);
     if(showCapture)
-        image(video, 0, 0, -WIDTH, HEIGHT);
+        image(video, 100, 0, -WIDTH, HEIGHT);
         // image(video, 0, 0, -video.width,video.height);
         push()
             if (detections) {
@@ -1335,8 +1339,6 @@ function draw() {
     hashInput.position(reInputWidth, reInputHeight);
     hashBtn.position(reInputWidth + reInputSpace, reInputHeight)
     saveBtn.position(saveBtnPos, saveBtnHeight)
-    recordBtn.style.left = recordBtnPos;
-    recordBtn.style.top = saveBtnHeight;
     recordType.style.left = document.documentElement.clientWidth/2 + WIDTH/2 - WIDTH*0.58; 
     recordType.style.top = saveBtnHeight+WIDTH*0.01
     recordType.style.width = WIDTH*0.45+"px"
@@ -1608,5 +1610,5 @@ function windowResized() {
     ellipse2$ = HEIGHT / 5 + HEIGHT / 15
     btnPosBase =document.documentElement.clientWidth/2 - WIDTH/2 + WIDTH /40*1.5;
     saveBtnPos = document.documentElement.clientWidth/2 + WIDTH/2 - WIDTH/10;
-    recordBtnPos = document.documentElement.clientWidth/2 + WIDTH/2 - WIDTH/5;
+    recordBtnPos = document.documentElement.clientWidth/2 + WIDTH/2 - WIDTH/5.5;
 }
