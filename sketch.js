@@ -675,6 +675,7 @@ let mobileTextSpace, pcTextSpace
 let line1
 let allBtnContainer, btnContainer0, btnContainer1, btnContainer2, btnContainer3, btnContainer4
 let btnContainerList, btnImageList
+let recordType, recordHint
 
 function setup() {
     createCanvas(WIDTH, HEIGHT);
@@ -819,10 +820,43 @@ function setup() {
     recordBtn.style.width = WIDTH/12;
     recordBtn.style.height = WIDTH/12;
     recordBtn.style.display = "block";
-    recordBtn.style.left = document.documentElement.clientWidth/2 + WIDTH/2 - WIDTH/5;  
+    recordBtn.style.left = document.documentElement.clientWidth/2 + WIDTH/2 - WIDTH/5; 
+    
+    recordType = document.getElementById("download_type");
+
+    recordHint = document.getElementsByClassName("download_type")
+    console.log(recordHint.length)
+    Array.prototype.forEach.call(recordHint,function(hint){
+        //  hint.style.display = "inline-block"
+         hint.style.background = "#ffffff00"
+         hint.style.padding = 5+"px "+15+"px "+5+"px "+15+"px"
+         hint.style.borderRadius = "30px"
+         hint.style.fontSize = 18+"px";
+    })
+    document.getElementById('save_canvas').addEventListener('mouseover', function(){
+        recordType.style.display =  "inline-block"
+        document.getElementById('download_mp4').style.display = "inline-block"
+        document.getElementById('download_webm').style.display = "inline-block"
+    });
+    document.getElementById('download_webm').addEventListener('click', function(){
+        console.log("00");
+        document.getElementById('download_webm').style.background = "#ffffff80"
+        document.getElementById('download_mp4').style.background = "#ffffff00"
+    });
+    document.getElementById('download_mp4').addEventListener('click', function(){
+        document.getElementById('download_mp4').style.background = "#ffffff80"
+        document.getElementById('download_webm').style.background = "#ffffff00"
+    });
+    document.getElementById('save_canvas').addEventListener('click', function(){
+        recordType.style.display = "none"
+        document.getElementById('download_mp4').style.display = "none"
+        document.getElementById('download_webm').style.display = "none"
+    });
+
 
     downloadText = document.getElementById("download_hint");
     downloadText.style.top = WIDTH/12;
+    downloadText.style.size = 
     downloadText.style.left = document.documentElement.clientWidth/2 + WIDTH/2 - WIDTH/5;  
 
     hashInput = createInput().attribute('placeholder', 'Your HAM number (0-749)');
@@ -1294,6 +1328,16 @@ function draw() {
     saveBtn.position(saveBtnPos, saveBtnHeight)
     recordBtn.style.left = recordBtnPos;
     recordBtn.style.top = saveBtnHeight;
+    recordType.style.left = document.documentElement.clientWidth/2 + WIDTH/2 - WIDTH*0.58; 
+    recordType.style.top = saveBtnHeight+WIDTH*0.01
+    recordType.style.width = WIDTH*0.45+"px"
+    Array.prototype.forEach.call(recordHint,function(hint){
+         hint.style.padding = WIDTH*0.01+"px "+WIDTH*0.02+"px "+WIDTH*0.01+"px "+WIDTH*0.02+"px"
+         hint.style.borderRadius = "30px"
+         hint.style.fontSize = HEIGHT*0.018 + "px";
+    })
+    document.getElementById('download_type_text WebM').style.fontSize = HEIGHT*0.02 + "px";
+    document.getElementById('download_type_text MP4').style.fontSize = HEIGHT*0.02 + "px";
     // button size
     
     let btnSize, inputSize1, inputSize2, inputHeight, inputTextSize, saveBtnSize
