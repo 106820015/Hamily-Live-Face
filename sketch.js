@@ -867,9 +867,9 @@ function setup() {
     //     document.getElementById('download_mp4').style.display = "none"
     //     document.getElementById('download_webm').style.display = "none"
     // });
-    recordGroup = document.getElementById("record");
-    recordGroup.style.left = document.documentElement.clientWidth/2 + WIDTH/2 - WIDTH/5.5;  
-    recordGroup.style.width = WIDTH/12;
+    // recordGroup = document.getElementById("record");
+    // recordGroup.style.left = document.documentElement.clientWidth/2 + WIDTH/2 - WIDTH/5.5;  
+    // recordGroup.style.width = WIDTH/12;
 
 
     hashInput = createInput().attribute('placeholder', 'Your HAM number (0-749)');
@@ -1313,7 +1313,7 @@ function draw() {
     
 } 
     // button position
-    let reBtnHeight, reInputHeight, reInputWidth, reInputSpace, btnSpace, saveBtnHeight
+    let reBtnHeight, reInputHeight, reInputWidth, reInputSpace, btnSpace, saveBtnHeight, hintradius
     if(document.documentElement.clientWidth<450){
         reBtnHeight = document.body.clientHeight/2 + HEIGHT/2 + HEIGHT*0.06
         reInputHeight = document.body.clientHeight/2 + HEIGHT/2 + HEIGHT*0.33
@@ -1321,11 +1321,13 @@ function draw() {
         reInputWidth = WIDTH*0.075
         reInputSpace = WIDTH*0.65
         saveBtnPos = document.documentElement.clientWidth/2 + WIDTH/2 - WIDTH/8;
-        recordBtnPos = document.documentElement.clientWidth/2 + WIDTH/2 - WIDTH/4;
+        recordBtnPos = document.documentElement.clientWidth/2 + WIDTH/2 - WIDTH/4.8;
         saveBtnHeight =document.body.clientHeight/2 - HEIGHT/2
         allBtnContainer.position(0, reBtnHeight)
         allBtnContainer.style('width', "100%")
         allBtnContainer.style('height', HEIGHT*0.19 +"px")
+        recordType.style.borderRadius = "10px";
+        hintradius = "10px";
     }else{
         reBtnHeight = document.body.clientHeight/2 + HEIGHT/2 - HEIGHT*0.09
         reInputHeight = reBtnHeight + HEIGHT*0.01
@@ -1335,20 +1337,25 @@ function draw() {
         allBtnContainer.position(document.documentElement.clientWidth/2 - WIDTH/2, reBtnHeight)
         allBtnContainer.style('width', WIDTH/2+"px")
         allBtnContainer.style('height', HEIGHT*0.08+"px")
+        hintradius = "30px";
     }
     hashInput.position(reInputWidth, reInputHeight);
     hashBtn.position(reInputWidth + reInputSpace, reInputHeight)
     saveBtn.position(saveBtnPos, saveBtnHeight)
-    recordType.style.left = document.documentElement.clientWidth/2 + WIDTH/2 - WIDTH*0.58; 
+    recordType.style.left = document.documentElement.clientWidth/2 + WIDTH/2 - WIDTH*0.62; 
     recordType.style.top = saveBtnHeight+WIDTH*0.01
-    recordType.style.width = WIDTH*0.45+"px"
+    recordType.style.width = WIDTH*0.51+"px"
     Array.prototype.forEach.call(recordHint,function(hint){
          hint.style.padding = WIDTH*0.01+"px "+WIDTH*0.02+"px "+WIDTH*0.01+"px "+WIDTH*0.02+"px"
-         hint.style.borderRadius = "30px"
-         hint.style.fontSize = HEIGHT*0.018 + "px";
+         hint.style.borderRadius = hintradius
+         hint.style.fontSize = HEIGHT*0.016 + "px";
+        //  hint.style.width = WIDTH*0.15+"px"
     })
     document.getElementById('download_type_text WebM').style.fontSize = HEIGHT*0.02 + "px";
     document.getElementById('download_type_text MP4').style.fontSize = HEIGHT*0.02 + "px";
+    document.getElementById('download_webm_hint').style.fontSize = HEIGHT*0.016 + "px";
+    document.getElementById('download_mp4_hint').style.fontSize = HEIGHT*0.016 + "px";
+    console.log(document.getElementById('download_mp4_hint').style.fontSize)
     recordGroup.style.left = recordBtnPos;
     recordGroup.style.top = saveBtnHeight;
     // button size
@@ -1368,6 +1375,14 @@ function draw() {
         inputHeight = WIDTH/20
         inputTextSize = HEIGHT*0.02
         saveBtnSize = WIDTH/12
+        let WH = Math.max(document.documentElement.clientWidth,document.documentElement.clientHeight)
+        if(WH/WIDTH > 2.5){
+            document.getElementById('download_webm_hint').textContent = "immediaely";
+            document.getElementById('download_mp4_hint').textContent = "takes 1 mins";
+        }else{
+            document.getElementById('download_webm_hint').textContent = "done immediaely";
+            document.getElementById('download_mp4_hint').textContent = "render takes 1 mins";
+        }
     }
     
     showCaptureBtn.size(btnSize, btnSize)
