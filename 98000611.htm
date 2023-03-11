@@ -80,13 +80,46 @@ canvas {
   font-family: Roboto;
   z-index: 100;
 }
-
+#download_type{
+  display: none;
+  position: absolute;
+  font-size: 14px;
+  color: #000000;
+  font-family: Roboto;
+  z-index: 100;
+  background: #ffffff80;
+  border-radius: 31px;
+}
+download_type{
+  display: none;
+  position: absolute;
+  font-size: 20%;
+  color: #ffffff;
+  font-family: Roboto;
+  z-index: 100;
+}
+#download_type_text{
+  font-size: 18px;
+  color: #000000;
+  font-family: Roboto;
+  z-index: 100;
+}
 </style></head>
 <body>
   <div id="record">
     <button id="save_canvas"><img src="img/Record.png" id="record_img"></button>
     <div id="download_hint">downloading···</div>
   </div>
+  <div id="download_type">
+      <div id="download_webm" class="download_type">
+        <div id="download_type_text WebM">WebM</div>
+        <div id="download_webm_hint">done immediaely</div>
+      </div>
+      <div id="download_mp4" class="download_type">
+        <div id="download_type_text MP4">MP4</div>
+        <div id="download_mp4_hint">render takes 1 mins</div>
+      </div>
+    </div>
   <script src="sketch.js"></script>
   <script src="recordCanvas.js"></script>
 </body></html>
