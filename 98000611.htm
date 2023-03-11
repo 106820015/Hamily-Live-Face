@@ -47,16 +47,22 @@ canvas {
   left: 0;
   right: 0;
 }
+#record {
+  position: absolute;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
 #save_canvas {
+  width: 100%;
   background-color: transparent;
   background-repeat: no-repeat;
   border: none;
   overflow: hidden;
   outline: none;
   display: none;
-  position: absolute;
   z-index: 100;
-  top:0;
   opacity: 0.85;
   padding: 0;
 }
@@ -68,16 +74,19 @@ canvas {
 }
 #download_hint{
   display: none;
-  position: absolute;
-  font-size: 20%;
+  font-size: 1.5vmin;
+  text-align: center;
   color: #ffffff;
   font-family: Roboto;
   z-index: 100;
 }
+
 </style></head>
 <body>
+  <div id="record">
     <button id="save_canvas"><img src="img/Record.png" id="record_img"></button>
     <div id="download_hint">downloading···</div>
-    <script src="sketch.js"></script>
-    <script src="recordCanvas.js"></script>
+  </div>
+  <script src="sketch.js"></script>
+  <script src="recordCanvas.js"></script>
 </body></html>

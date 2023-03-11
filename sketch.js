@@ -670,7 +670,7 @@ let facialFeatures = new FacialFeatures({
 });
 let btnPosBase, saveBtnPos, recordBtnPos
 
-let ShowCloseBtn, RandomBtn, SeaBtn, LiveBtn, AlphaBtn, saveBtn, recordBtn, downloadText, btnText, bgRect, spaceLine1, spaceLine2
+let ShowCloseBtn, RandomBtn, SeaBtn, LiveBtn, AlphaBtn, saveBtn, recordGroup, recordBtn, btnText, bgRect, spaceLine1, spaceLine2
 let mobileTextSpace, pcTextSpace
 let line1
 let allBtnContainer, btnContainer0, btnContainer1, btnContainer2, btnContainer3, btnContainer4
@@ -815,15 +815,12 @@ function setup() {
     saveBtn.mouseOut(() =>saveBtn.style("opacity", "0.85"));
     saveBtn.mousePressed(saveImg)
 
-    recordBtn = document.getElementById("save_canvas");
-    recordBtn.style.width = WIDTH/12;
-    recordBtn.style.height = WIDTH/12;
-    recordBtn.style.display = "block";
-    recordBtn.style.left = document.documentElement.clientWidth/2 + WIDTH/2 - WIDTH/5;  
+    recordGroup = document.getElementById("record");
+    recordGroup.style.left = document.documentElement.clientWidth/2 + WIDTH/2 - WIDTH/5;  
+    recordGroup.style.width = WIDTH/12;
 
-    downloadText = document.getElementById("download_hint");
-    downloadText.style.top = WIDTH/12;
-    downloadText.style.left = document.documentElement.clientWidth/2 + WIDTH/2 - WIDTH/5;  
+    recordBtn = document.getElementById("save_canvas");
+    recordBtn.style.display = "block"; 
 
     hashInput = createInput().attribute('placeholder', 'Your HAM number (0-749)');
     hashInput.style('font-size', HEIGHT*0.02);
@@ -1292,8 +1289,8 @@ function draw() {
     hashInput.position(reInputWidth, reInputHeight);
     hashBtn.position(reInputWidth + reInputSpace, reInputHeight)
     saveBtn.position(saveBtnPos, saveBtnHeight)
-    recordBtn.style.left = recordBtnPos;
-    recordBtn.style.top = saveBtnHeight;
+    recordGroup.style.left = recordBtnPos;
+    recordGroup.style.top = saveBtnHeight;
     // button size
     
     let btnSize, inputSize1, inputSize2, inputHeight, inputTextSize, saveBtnSize
@@ -1323,8 +1320,7 @@ function draw() {
     hashInput.style('font-size', inputTextSize);
     hashBtn.style('font-size', inputTextSize);
     saveBtn.size(saveBtnSize, saveBtnSize)
-    recordBtn.style.width = saveBtnSize;
-    recordBtn.style.height = saveBtnSize;
+    recordGroup.style.width = saveBtnSize;
 
     //-----Load Model Hint-----// 
     if(!isModelLoaded){
