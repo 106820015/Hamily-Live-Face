@@ -1184,7 +1184,8 @@ function draw() {
     scale(-0.2,0.15);    
     translate(-WIDTH,0);
     if(showCapture)
-        image(video, 100, 0, -WIDTH, HEIGHT);
+        translate(100,0)
+        image(video, 0 , 0, -WIDTH, HEIGHT);
         // image(video, 0, 0, -video.width,video.height);
         push()
             if (detections) {
@@ -1337,14 +1338,14 @@ function draw() {
         allBtnContainer.position(document.documentElement.clientWidth/2 - WIDTH/2, reBtnHeight)
         allBtnContainer.style('width', WIDTH/2+"px")
         allBtnContainer.style('height', HEIGHT*0.08+"px")
-        hintradius = "30px";
+        hintradius = "13em";
     }
     hashInput.position(reInputWidth, reInputHeight);
     hashBtn.position(reInputWidth + reInputSpace, reInputHeight)
     saveBtn.position(saveBtnPos, saveBtnHeight)
-    recordType.style.left = document.documentElement.clientWidth/2 + WIDTH/2 - WIDTH*0.62; 
+    recordType.style.left = document.documentElement.clientWidth/2 + WIDTH/2 - WIDTH*0.59; 
     recordType.style.top = saveBtnHeight+WIDTH*0.01
-    recordType.style.width = WIDTH*0.51+"px"
+    recordType.style.width = WIDTH*0.48+"px"
     Array.prototype.forEach.call(recordHint,function(hint){
          hint.style.padding = WIDTH*0.01+"px "+WIDTH*0.02+"px "+WIDTH*0.01+"px "+WIDTH*0.02+"px"
          hint.style.borderRadius = hintradius
